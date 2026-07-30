@@ -2,7 +2,7 @@ name: Daily Birthday Email
 
 on:
   schedule:
-    - cron: "5 17 * * *"
+    - cron: "*/5 * * * *"
       timezone: "Europe/Lisbon"
 
   workflow_dispatch:
@@ -29,6 +29,14 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+
+      - name: Show trigger information
+        run: |
+          echo "Trigger: ${{ github.event_name }}"
+          echo "UTC time:"
+          date -u
+          echo "Lisbon time:"
+          TZ=Europe/Lisbon date
 
       - name: Run birthday script
         env:

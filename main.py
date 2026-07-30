@@ -25,8 +25,8 @@ current_time = dt.datetime.now()
 current_day = (current_time.month, current_time.day)
 
 #CREDENTIALS
-MY_EMAIL = "rei.luismiguelalves@gmail.com"
-MY_PASSWORD = "ctfryesduhslpxpb"
+MY_EMAIL = os.environ.get("MY_EMAIL")
+MY_PASSWORD = os.environ.get("MY_PASSWORD")
 
 if current_day in days:
     person = birthdays[days.index(current_day)]

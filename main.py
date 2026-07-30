@@ -1,7 +1,7 @@
 ##################### Extra Hard Starting Project ######################
 import random
 import smtplib
-
+import os
 import pandas as pd
 import datetime as dt
 

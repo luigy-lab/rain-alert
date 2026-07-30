@@ -2,7 +2,7 @@ name: Daily Birthday Email
 
 on:
   schedule:
-    - cron: "47 13 * * *"
+    - cron: "5 17 * * *"
       timezone: "Europe/Lisbon"
 
   workflow_dispatch:

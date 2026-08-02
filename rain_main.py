@@ -9,7 +9,6 @@ TWILIO_AUTH_TOKEN = os.environ.get("AUTH_TOKEN")
 API_KEY = os.environ.get("API_KEY")
 API_ENDPOINT = "https://api.openweathermap.org/data/2.5/forecast?"
 MY_PHONE = os.environ.get("MY_PHONE")
-print(API_KEY)
 
 params = {
     "lat": 34.871849,

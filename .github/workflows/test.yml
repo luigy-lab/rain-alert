@@ -11,6 +11,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
+    env:
+      ACCOUNT_SID: ${{ secrets.ACCOUNT_SID }}
+      AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
+      API_KEY: ${{ secrets.API_KEY }}
+      MY_PHONE: ${{ secrets.MY_PHONE }}
+      TEST_MODE: "true"
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -41,11 +48,6 @@ jobs:
           echo "All required files were found"
 
       - name: Check secrets
-        env:
-          ACCOUNT_SID: ${{ secrets.ACCOUNT_SID }}
-          AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
-          API_KEY: ${{ secrets.API_KEY }}
-          MY_PHONE: ${{ secrets.MY_PHONE }}
         run: |
           test -n "$ACCOUNT_SID" || {
             echo "ACCOUNT_SID is not configured"
@@ -73,9 +75,4 @@ jobs:
         run: python -m py_compile rain_main.py
 
       - name: Run rain alert test
-        env:
-          ACCOUNT_SID: ${{ secrets.ACCOUNT_SID }}
-          AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
-          API_KEY: ${{ secrets.API_KEY }}
-          MY_PHONE: ${{ secrets.MY_PHONE }}
         run: python rain_main.py

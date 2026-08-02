@@ -77,10 +77,10 @@ def send_sms(message_body):
     )
 
     message = client.messages.create(
-        to=phone_number,
-        from_=TWILIO_PHONE_NUMBER,
-        body=message_body,
-    )
+    to=phone_number,
+    from_=TWILIO_PHONE_NUMBER,
+    body="sms_account_alerts",
+)
 
     print(f"SMS status: {message.status}")
 

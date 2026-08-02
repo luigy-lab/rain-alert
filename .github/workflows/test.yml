@@ -1,4 +1,4 @@
-name: Test Birthday Email
+name: Test Rain Alert
 
 on:
   workflow_dispatch:
@@ -13,10 +13,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@v6
 
       - name: Set up Python
-        uses: actions/setup-python@v7
+        uses: actions/setup-python@v6
         with:
           python-version: "3.12"
           cache: pip
@@ -24,16 +24,17 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          python -m pip install -r requirements.txt
 
       - name: Check required files
         run: |
-          test -f main.py || { echo "main.py not found"; exit 1; }
-          test -f requirements.txt || { echo "requirements.txt not found"; exit 1; }
-          test -f birthdays.csv || { echo "birthdays.csv not found"; exit 1; }
+          test -f rain_main.py || {
+            echo "rain_main.py was not found"
+            exit 1
+          }
 
-          compgen -G "letter_templates/letter_*.txt" > /dev/null || {
-            echo "No letter templates found"
+          test -f requirements.txt || {
+            echo "requirements.txt was not found"
             exit 1
           }
 
@@ -41,20 +42,40 @@ jobs:
 
       - name: Check secrets
         env:
-          MY_EMAIL: ${{ secrets.MY_EMAIL }}
-          MY_PASSWORD: ${{ secrets.MY_PASSWORD }}
+          ACCOUNT_SID: ${{ secrets.ACCOUNT_SID }}
+          AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
+          API_KEY: ${{ secrets.API_KEY }}
+          MY_PHONE: ${{ secrets.MY_PHONE }}
         run: |
-          test -n "$MY_EMAIL" || { echo "MY_EMAIL is not configured"; exit 1; }
-          test -n "$MY_PASSWORD" || { echo "MY_PASSWORD is not configured"; exit 1; }
+          test -n "$ACCOUNT_SID" || {
+            echo "ACCOUNT_SID is not configured"
+            exit 1
+          }
 
-          echo "Both secrets are configured"
+          test -n "$AUTH_TOKEN" || {
+            echo "AUTH_TOKEN is not configured"
+            exit 1
+          }
+
+          test -n "$API_KEY" || {
+            echo "API_KEY is not configured"
+            exit 1
+          }
+
+          test -n "$MY_PHONE" || {
+            echo "MY_PHONE is not configured"
+            exit 1
+          }
+
+          echo "All required secrets are configured"
 
       - name: Check Python syntax
-        run: python -m py_compile main.py
+        run: python -m py_compile rain_main.py
 
-      - name: Send test email
+      - name: Run rain alert test
         env:
-          MY_EMAIL: ${{ secrets.MY_EMAIL }}
-          MY_PASSWORD: ${{ secrets.MY_PASSWORD }}
-          TEST_MODE: "true"
+          ACCOUNT_SID: ${{ secrets.ACCOUNT_SID }}
+          AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
+          API_KEY: ${{ secrets.API_KEY }}
+          MY_PHONE: ${{ secrets.MY_PHONE }}
         run: python rain_main.py

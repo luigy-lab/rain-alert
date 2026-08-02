@@ -57,4 +57,4 @@ jobs:
           MY_EMAIL: ${{ secrets.MY_EMAIL }}
           MY_PASSWORD: ${{ secrets.MY_PASSWORD }}
           TEST_MODE: "true"
-        run: python main.py
+        run: python rain_main.py

@@ -15,6 +15,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
+    env:
+      ACCOUNT_SID: ${{ secrets.ACCOUNT_SID }}
+      AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
+      API_KEY: ${{ secrets.API_KEY }}
+      MY_PHONE: ${{ secrets.MY_PHONE }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -38,10 +44,29 @@ jobs:
           echo "Lisbon time:"
           TZ=Europe/Lisbon date
 
+      - name: Check secrets
+        run: |
+          test -n "$ACCOUNT_SID" || {
+            echo "ACCOUNT_SID is not configured"
+            exit 1
+          }
+
+          test -n "$AUTH_TOKEN" || {
+            echo "AUTH_TOKEN is not configured"
+            exit 1
+          }
+
+          test -n "$API_KEY" || {
+            echo "API_KEY is not configured"
+            exit 1
+          }
+
+          test -n "$MY_PHONE" || {
+            echo "MY_PHONE is not configured"
+            exit 1
+          }
+
+          echo "All required secrets are configured"
+
       - name: Run rain alert
-        env:
-          ACCOUNT_SID: ${{ secrets.ACCOUNT_SID }}
-          AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
-          API_KEY: ${{ secrets.API_KEY }}
-          MY_PHONE: ${{ secrets.MY_PHONE }}
         run: python rain_main.py
